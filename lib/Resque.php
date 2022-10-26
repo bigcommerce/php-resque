@@ -186,7 +186,7 @@ class Resque
 	     * But the blpop is a bit different. It returns the name as prefix:queue:name
 	     * So we need to strip off the prefix:queue: part
 	     */
-	    $queue = substr($item[0], strlen(self::redis()->getPrefix() . 'queue:'));
+	    $queue = substr($item[0], strlen(Resque_Redis::getPrefix() . 'queue:'));
 
 	    return array(
 		'queue'   => $queue,
