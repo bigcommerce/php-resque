@@ -2,10 +2,11 @@
 
 namespace Resque\Tests\Reserver;
 
+use PHPUnit\Framework\TestCase;
 use Resque\Reserver\ReserverFactory;
 use Resque;
 
-class ReserverFactoryTest extends \PHPUnit_Framework_TestCase
+class ReserverFactoryTest extends TestCase
 {
     private function getFactory()
     {

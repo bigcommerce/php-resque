@@ -92,7 +92,9 @@ class Resque_Redis
 	// mset
 	// renamenx
 
-	/**
+    private $driver;
+
+    /**
 	 * Set Redis namespace (prefix) default: resque
 	 * @param string $namespace
 	 */

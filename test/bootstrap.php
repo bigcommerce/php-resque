@@ -93,6 +93,9 @@ if(function_exists('pcntl_signal')) {
 class Test_Job
 {
 	public static $called = false;
+    public $args;
+    public $queue;
+    public $job;
 
 	public function perform()
 	{
@@ -123,7 +126,7 @@ class Test_Job_With_SetUp
 	public static $called = false;
 	public $args = false;
 
-	public function setUp()
+	public function setUp(): void
 	{
 		self::$called = true;
 	}
@@ -145,7 +148,7 @@ class Test_Job_With_TearDown
 
 	}
 
-	public function tearDown()
+	public function tearDown(): void
 	{
 		self::$called = true;
 	}

@@ -19,6 +19,8 @@ class BlockingListPopReserver extends AbstractReserver implements ReserverInterf
 {
     /** @var int */
     const DEFAULT_TIMEOUT = 5;
+    /** @var int */
+    private $timeout;
 
     /**
      * @param LoggerInterface $logger
