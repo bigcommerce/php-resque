@@ -1,0 +1,44 @@
+version: 2.1
+
+orbs:
+  ci: bigcommerce/internal@volatile
+  php: bigcommerce/internal-php@volatile
+
+########################################################################################################################
+# Runtime envs
+########################################################################################################################
+executors:
+  php:
+    parameters:
+      php-version:
+        type: string
+        default: "8.4"
+    working_directory: ~/repo
+    docker:
+      - image: cimg/php:<<parameters.php-version>>
+        environment:
+          ENABLE_REDIS_EXT: 1
+      - image: redis
+
+jobs_default: &jobs_default
+  context: "GCR + Artifact Bucket Access"
+  e:
+    name: php
+    php-version: << matrix.php-version >>
+  matrix:
+    parameters:
+      php-version: [ "8.4" ]
+
+########################################################################################################################
+# Workflows
+########################################################################################################################
+workflows:
+  version: 2
+  full:
+    jobs:
+      - php/phpunit-tests:
+          <<: *jobs_default
+      - ci/notify-success:
+          context: "GCR + Artifact Bucket Access"
+          requires:
+            - php/phpunit-tests
