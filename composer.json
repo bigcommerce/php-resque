@@ -13,14 +13,17 @@
 	],
 	"repositories": [
 		{
-			"type": "vcs",
-			"url": "https://github.com/chrisboulton/credis"
+			"type": "git",
+			"url": "https://github.com/bigcommerce/credis.git",
+			"replace": {
+				"colinmollenhour/credis":  "*"
+			}
 		}
 	],
 	"require": {
-		"php": ">=5.3.0",
+		"php": ">=8.3",
 		"ext-pcntl": "*",
-		"colinmollenhour/credis": "~1.7",
+		"colinmollenhour/credis": "~1.16",
 		"psr/log": "1.0.0"
 	},
 	"suggest": {
