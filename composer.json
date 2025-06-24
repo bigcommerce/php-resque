@@ -23,7 +23,7 @@
 	"require": {
 		"php": ">=8.3",
 		"ext-pcntl": "*",
-		"colinmollenhour/credis": "~1.16",
+		"colinmollenhour/credis": "~1.7",
 		"psr/log": "1.0.0"
 	},
 	"suggest": {
@@ -39,6 +39,11 @@
 	"autoload": {
 		"psr-0": {
 			"Resque": "lib"
+		}
+	},
+	"autoload-dev": {
+		"psr-0": {
+			"Resque": "test/"
 		}
 	}
 }
