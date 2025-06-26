@@ -17,8 +17,8 @@ use Psr\Log\LoggerInterface;
  */
 class BlockingListPopReserver extends AbstractReserver implements ReserverInterface
 {
-    /** @var int */
-    const DEFAULT_TIMEOUT = 5;
+    const int DEFAULT_TIMEOUT = 5;
+    protected int $timeout;
 
     /**
      * @param LoggerInterface $logger

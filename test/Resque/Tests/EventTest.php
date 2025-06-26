@@ -1,6 +1,7 @@
 <?php
 
 use Resque\Reserver\ReserverFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Resque_Event tests.
@@ -12,8 +13,9 @@ use Resque\Reserver\ReserverFactory;
 class Resque_Tests_EventTest extends Resque_Tests_TestCase
 {
 	private $callbacksHit = array();
+    protected \Resque_Worker $worker;
 
-	public function setUp()
+	public function setUp(): void
 	{
 		Test_Job::$called = false;
 
@@ -27,7 +29,7 @@ class Resque_Tests_EventTest extends Resque_Tests_TestCase
 		$this->worker->registerWorker();
 	}
 
-	public function tearDown()
+	public function tearDown(): void
 	{
 		Resque_Event::clearListeners();
 		$this->callbacksHit = array();
@@ -46,19 +48,17 @@ class Resque_Tests_EventTest extends Resque_Tests_TestCase
 		return $job;
 	}
 
-	public function eventCallbackProvider()
-	{
-		return array(
-			array('beforePerform', 'beforePerformEventCallback'),
-			array('afterPerform', 'afterPerformEventCallback'),
-			array('afterFork', 'afterForkEventCallback'),
-		);
-	}
+    public static function eventCallbackProvider(): array
+    {
+        return array(
+            array('beforePerform', 'beforePerformEventCallback'),
+            array('afterPerform', 'afterPerformEventCallback'),
+            array('afterFork', 'afterForkEventCallback'),
+        );
+    }
 
-	/**
-	 * @dataProvider eventCallbackProvider
-	 */
-	public function testEventCallbacksFire($event, $callback)
+    #[DataProvider('eventCallbackProvider')]
+    public function testEventCallbacksFire($event, $callback)
 	{
 		Resque_Event::listen($event, array($this, $callback));
 
@@ -154,7 +154,7 @@ class Resque_Tests_EventTest extends Resque_Tests_TestCase
 		throw new Resque_Job_DontPerform;
 	}
 
-	public function beforeEnqueueEventDontCreateCallback($queue, $class, $args, $track = false)
+	public function beforeEnqueueEventDontCreateCallback($class, $args, $queue, $id)
 	{
 		$this->callbacksHit[] = __FUNCTION__;
 		throw new Resque_Job_DontCreate;
@@ -170,7 +170,7 @@ class Resque_Tests_EventTest extends Resque_Tests_TestCase
 		$this->assertEquals($args[0], 'somevar');
 	}
 
-	public function afterEnqueueEventCallback($class, $args)
+	public function afterEnqueueEventCallback($class, $args, $queue, $id)
 	{
 		$this->callbacksHit[] = __FUNCTION__;
 		$this->assertEquals('Test_Job', $class);
@@ -179,7 +179,7 @@ class Resque_Tests_EventTest extends Resque_Tests_TestCase
 		), $args);
 	}
 
-	public function beforeEnqueueEventCallback($job)
+	public function beforeEnqueueEventCallback($class, $args, $queue, $id)
 	{
 		$this->callbacksHit[] = __FUNCTION__;
 	}

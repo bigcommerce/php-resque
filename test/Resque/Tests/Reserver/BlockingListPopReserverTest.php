@@ -40,14 +40,14 @@ class BlockingListPopReserverTest extends QueueOrderReserverTest
         // https://github.com/facebook/hhvm/issues/6286
         $redis = $this->getMockBuilder('\Resque_Redis')
             ->disableOriginalConstructor()
-            ->setMethods(['__call'])
+            ->onlyMethods(['__call'])
             ->getMock();
 
         $redis
             ->expects($this->once())
             ->method('__call')
             ->with($this->equalTo('blpop'), $this->equalTo(array($redisQueues, 1)))
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $originalRedis = Resque::$redis;
 
@@ -79,14 +79,14 @@ class BlockingListPopReserverTest extends QueueOrderReserverTest
 
         $redis = $this->getMockBuilder('\Resque_Redis')
             ->disableOriginalConstructor()
-            ->setMethods(['__call'])
+            ->onlyMethods(['__call'])
             ->getMock();
 
         $redis
             ->expects($this->once())
             ->method('__call')
             ->with($this->equalTo('blpop'), $this->equalTo(array($redisQueues, $timeout)))
-            ->will($this->returnValue($item));
+            ->willReturn($item);
 
         $originalRedis = Resque::$redis;
 

@@ -18,11 +18,11 @@ class Resque_Log extends Psr\Log\AbstractLogger
 	 * Logs with an arbitrary level.
 	 *
 	 * @param mixed   $level    PSR-3 log level constant, or equivalent string
-	 * @param string  $message  Message to log, may contain a { placeholder }
+	 * @param string|\Stringable  $message  Message to log, may contain a { placeholder }
 	 * @param array   $context  Variables to replace { placeholder }
-	 * @return null
+	 * @return void
 	 */
-	public function log($level, $message, array $context = array())
+	public function log($level, \Stringable|string $message, array $context = []): void
 	{
 		if ($this->verbose || ($level !== Psr\Log\LogLevel::INFO && $level !== Psr\Log\LogLevel::DEBUG)) {
             $now = (new DateTimeImmutable('now', new DateTimeZone('UTC')))->format('c');
@@ -41,7 +41,7 @@ class Resque_Log extends Psr\Log\AbstractLogger
 	 * @param  array   $context  Array of variables to use in message
 	 * @return string
 	 */
-	public function interpolate($message, array $context = array())
+	public function interpolate($message, array $context = [])
 	{
 		// build a replacement array with braces around the context keys
 		$replace = array();

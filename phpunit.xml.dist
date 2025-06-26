@@ -1,24 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit backupGlobals="false"
 	bootstrap="test/bootstrap.php"
-	backupStaticAttributes="false"
 	colors="true"
-	convertErrorsToExceptions="true"
-	convertNoticesToExceptions="true"
-	convertWarningsToExceptions="true"
 	processIsolation="false"
 	stopOnFailure="false"
-	syntaxCheck="false"
 >
 	<testsuites>
 		<testsuite name="Resque Test Suite">
 			<directory>./test/Resque/</directory>
+			<exclude>./test/Resque/Tests/Reserver/AbstractReserverTest.php</exclude>
 		</testsuite>
 	</testsuites>
 
-	<filter>
-		<whitelist>
+	<source>
+		<include>
 			<directory suffix=".php">./lib/Resque/</directory>
-		</whitelist>
-	</filter>
+		</include>
+	</source>
 </phpunit>

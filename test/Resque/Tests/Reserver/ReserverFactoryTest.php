@@ -4,24 +4,23 @@ namespace Resque\Tests\Reserver;
 
 use Resque\Reserver\ReserverFactory;
 use Resque;
+use PHPUnit\Framework\Attributes\DataProvider;
 
-class ReserverFactoryTest extends \PHPUnit_Framework_TestCase
+class ReserverFactoryTest extends \PHPUnit\Framework\TestCase
 {
-    private function getFactory()
+    private function getFactory(): ReserverFactory
     {
         return new ReserverFactory(new \Resque_Log());
     }
 
-    /**
-     * @expectedException Resque\Reserver\UnknownReserverException
-     * @expectedExceptionMessage Unknown reserver 'foo'
-     */
     public function testCreateReserverFromNameThrowsExceptionForUnknownReserver()
     {
+        $this->expectException(\Resque\Reserver\UnknownReserverException::class);
+        $this->expectExceptionMessage('Unknown reserver \'foo\'');
         $this->getFactory()->createReserverFromName('foo', array());
     }
 
-    public function createReserverFromNameDataProvider()
+    public static function createReserverFromNameDataProvider(): array
     {
         return array(
             array('queue_order', '\Resque\Reserver\QueueOrderReserver'),
@@ -30,9 +29,7 @@ class ReserverFactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @dataProvider createReserverFromNameDataProvider
-     */
+    #[DataProvider('createReserverFromNameDataProvider')]
     public function testCreateReserverFromNameCreatesExpectedReserver($name, $expectedReserver)
     {
         $queues = array(
@@ -58,7 +55,7 @@ class ReserverFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\Resque\Reserver\QueueOrderReserver', $reserver);
     }
 
-    public function createReserverFromEnvironmentDataProvider()
+    public static function createReserverFromEnvironmentDataProvider(): array
     {
         return array(
             array(array('BLOCKING=1'), '\Resque\Reserver\BlockingListPopReserver'),
@@ -69,9 +66,7 @@ class ReserverFactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @dataProvider createReserverFromEnvironmentDataProvider
-     */
+    #[DataProvider('createReserverFromEnvironmentDataProvider')]
     public function testCreateReserverFromEnvironmentCreatesExpectedReserver($env, $expectedReserver)
     {
         $queues = array(
@@ -98,12 +93,10 @@ class ReserverFactoryTest extends \PHPUnit_Framework_TestCase
         putenv('RESERVER');
     }
 
-    /**
-     * @expectedException Resque\Reserver\UnknownReserverException
-     * @expectedExceptionMessage Unknown reserver 'foobar'
-     */
     public function testCreateReserverFromEnvironmentThrowsExceptionForUnknownReserver()
     {
+        $this->expectException(\Resque\Reserver\UnknownReserverException::class);
+        $this->expectExceptionMessage('Unknown reserver \'foobar\'');
         putenv('RESERVER=foobar');
         $this->getFactory()->createReserverFromEnvironment(array());
         putenv('RESERVER');
