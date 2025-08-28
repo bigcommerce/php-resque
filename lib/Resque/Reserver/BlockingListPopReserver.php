@@ -27,7 +27,7 @@ class BlockingListPopReserver extends AbstractReserver implements ReserverInterf
      * @param int $timeout The number of seconds to wait for a job to be enqueued. A timeout of zero will block
      * indefinitely.
      */
-    public function __construct(LoggerInterface $logger, array $queues, $timeout = self::DEFAULT_TIMEOUT)
+    public function __construct(LoggerInterface $logger, array $queues, int $timeout = self::DEFAULT_TIMEOUT)
     {
         $this->timeout = $timeout;
         parent::__construct($logger, $queues);

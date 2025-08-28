@@ -14,7 +14,7 @@ class Resque_Redis
 	 */
 	private static $defaultNamespace = 'resque:';
 
-    protected Credis_Client $driver;
+    protected ?Credis_Client $driver;
 
 	/**
 	 * A default host to connect to
