@@ -8,7 +8,8 @@
  */
 
 $loader = require __DIR__ . '/../vendor/autoload.php';
-$loader->add('Resque_Tests', __DIR__);
+
+use Resque\Reserver\ReserverFactory;
 
 define('TEST_MISC', realpath(__DIR__ . '/misc/'));
 define('REDIS_CONF', TEST_MISC . '/redis.conf');
@@ -36,6 +37,9 @@ if(!preg_match('#^\s*port\s+([0-9]+)#m', $config, $matches)) {
 }
 
 Resque::setBackend('localhost:' . $matches[1]);
+
+$reserverFactory = new ReserverFactory(new Resque_Log());
+Resque_Worker::setReserverFactory($reserverFactory);
 
 // Shutdown
 function killRedis($pid)
@@ -89,6 +93,9 @@ if(function_exists('pcntl_signal')) {
 class Test_Job
 {
 	public static $called = false;
+    public $args = [];
+    public $queue = 'default';
+    public $job;
 
 	public function perform()
 	{
@@ -103,6 +110,9 @@ class Failing_Job_Exception extends Exception
 
 class Failing_Job
 {
+    public $job;
+    public $queue;
+    public $args = [];
 	public function perform()
 	{
 		throw new Failing_Job_Exception('Message!');
@@ -118,6 +128,8 @@ class Test_Job_With_SetUp
 {
 	public static $called = false;
 	public $args = false;
+    public $job;
+    public $queue;
 
 	public function setUp()
 	{
@@ -135,6 +147,8 @@ class Test_Job_With_TearDown
 {
 	public static $called = false;
 	public $args = false;
+    public $job;
+    public $queue;
 
 	public function perform()
 	{

@@ -11,7 +11,7 @@ class Resque_Event
 	/**
 	 * @var array Array containing all registered callbacks, indexked by event name.
 	 */
-	private static $events = array();
+	private static array $events = array();
 
 	/**
 	 * Raise a given event with the supplied data.
